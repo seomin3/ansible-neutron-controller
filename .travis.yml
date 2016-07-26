@@ -34,16 +34,20 @@ install:
   - sudo pip install ansible
   - sudo ansible-galaxy install -r tests/requirements.yml
 
-  # TODO:  expose rabbitmq port to conatiners with dockerhost option
-script:
+before_script:
+  - sudo rabbitmqctl add_user test testpw
+  - sudo rabbitmqctl set_permissions test ".*" ".*" ".*"
+
   - container_id=$(mktemp)
   # Run container in detached state
   - >
-    sudo docker run --add-host=docker:`/sbin/ip route|awk '/default/ { print  $3}'` --detach
+    sudo docker run --add-host=dockerhost:`/sbin/ip addr show docker0 | awk '/inet / {print $2}' | cut -d '/' -f1` --detach
     --volume=/etc/ansible/roles:/etc/ansible/roles:rw ${run_opts}
     --volume="${PWD}":/etc/ansible/roles/openstack-neutron:rw ${run_opts}
     ${distribution}-${version}:ansible "${init}" > "${container_id}"
 
+
+script:
   # Ansible syntax check.
   - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/openstack-neutron/tests/test_travis.yml --syntax-check'
 
@@ -57,5 +61,6 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
+after_script:
   # Clean up
   - 'sudo docker stop "$(cat ${container_id})"'
