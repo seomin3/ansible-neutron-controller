@@ -1,0 +1,30 @@
+---
+
+# RabbitMQ
+rabbit_hostname: 'localhost'
+rabbit_username: 'rabbit_username_default'
+rabbit_password: 'rabbit_pass_default'
+# Keystone
+keystone_admin_port: 35357
+keystone_hostname: 'localhost'
+keystone_port: 5000
+keystone_protocol: 'http'
+nova_password: 'nova_pass_default'
+
+neutron_plugin: 'ml2'
+neutron_plugin_path: '/etc/neutron/plugins/ml2/ml2_conf.ini'
+
+neutron_password: 'neutron_pass_default'
+
+neutron_database_url: 'sqlite:////var/lib/neutron/neutron.sqlite'
+
+neutron_nova_metadata_ip: 'localhost'
+neutron_metadata_secret: 'somefnordity'
+
+midonet_api_hostname: 'localhost'
+midonet_api_uri: 'http://{{ midonet_api_hostname }}:8181/midonet-api'
+midonet_api_username: 'midonet'
+midonet_api_password: 'midonet_pass_default'
+
+provider_interface_name: '{{ ansible_default_ipv4.interface }}'
+overlay_interface_address: '{{ ansible_default_ipv4.address }}'

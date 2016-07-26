@@ -1,0 +1,7 @@
+---
+
+- include: packages_redhat_{{ neutron_plugin | default('ml2') }}.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: packages_debian_{{ neutron_plugin | default('ml2') }}.yml
+  when: ansible_os_family == 'Debian'

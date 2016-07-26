@@ -1,0 +1,151 @@
+---
+
+# install ml2 package for rh
+
+
+- name: Configure neutron controller
+  ini_file:
+    dest: /etc/neutron/neutron.conf
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  with_items:
+    # Database
+    - section: 'database'
+      option: 'connection'
+      value: '{{ neutron_database_url }}'
+    # Midonet
+    - section: 'DEFAULT'
+      option: 'core_plugin'
+      value: 'midonet.neutron.plugin_v2.MidonetPluginV2'
+    - section: 'DEFAULT'
+      option: 'service_plugins'
+      value: 'midonet.neutron.services.l3.l3_midonet.MidonetL3ServicePlugin'
+    - section: DEFAULT
+      option: allow_overlapping_ips
+      value: 'True'
+    - section: 'DEFAULT'
+      option: 'dhcp_agent_notification'
+      value: 'False'
+    # Messaging
+    - section: DEFAULT
+      option: rpc_backend
+      value: rabbit
+    - section: oslo_messaging_rabbit
+      option: rabbit_host
+      value: '{{ rabbit_hostname }}'
+    - section: oslo_messaging_rabbit
+      option: rabbit_userid
+      value: '{{ rabbit_username }}'
+    - section: oslo_messaging_rabbit
+      option: rabbit_password
+      value: '{{ rabbit_password }}'
+    # Keystone
+    - section: DEFAULT
+      option: auth_strategy
+      value: keystone
+      # FIXME memcached_servers
+    - section: keystone_authtoken
+      option: auth_url
+      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}/'
+    - section: keystone_authtoken
+      option: auth_uri
+      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_port }}/'
+    - section: 'keystone_authtoken'
+      option: 'auth_plugin'
+      value: 'password'
+    - section: keystone_authtoken
+      option: project_domain_name
+      value: default
+    - section: keystone_authtoken
+      option: user_domain_name
+      value: default
+    - section: keystone_authtoken
+      option: project_name
+      value: service
+    - section: keystone_authtoken
+      option: username
+      value: neutron
+    - section: keystone_authtoken
+      option: password
+      value: '{{ neutron_password }}'
+    # Nova
+    - section: 'DEFAULT'
+      option: 'notify_nova_on_port_status_changes'
+      value: 'True'
+    - section: 'DEFAULT'
+      option: 'notify_nova_on_port_data_changes'
+      value: 'True'
+    - section: 'nova'
+      option: 'auth_plugin'
+      value: 'password'
+    - section: 'nova'
+      option: 'project_domain_name'
+      value: 'default'
+    - section: 'nova'
+      option: 'user_domain_name'
+      value: 'default'
+    - section: 'nova'
+      option: 'project_name'
+      value: 'service'
+    - section: 'nova'
+      option: 'username'
+      value: 'nova'
+    - section: 'nova'
+      option: 'password'
+      value: '{{ neutron_nova_password }}'
+    - section: 'DEFAULT'
+      option: 'nova_url'
+      value: '{{ neutron_nova_url }}' # http://controller:8774/v2.1
+    - section: nova
+      option: auth_url
+      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}/'
+  notify:
+    - Restart neutron server
+    - Sync neutron database
+
+- name: Create plugin directory
+  file:
+    path: '/etc/neutron/plugins/midonet'
+    state: directory
+    owner: 'neutron'
+    mode: 0755
+
+- name: Set default neutron plugin
+  lineinfile:
+    dest: '/etc/default/neutron-server'
+    regexp: '^NEUTRON_PLUGIN_CONFIG=.*$'
+    line: 'NEUTRON_PLUGIN_CONFIG="/etc/neutron/plugins/midonet/midonet.ini"'
+    backrefs: True
+  when: ansible_os_family == 'Debian'
+
+- name: Link default neutron plugin
+  file:
+    src: '/etc/neutron/plugins/midonet/midonet.ini'
+    dest: '/etc/neutron/plugin.ini'
+    owner: neutron
+    state: link
+  when: ansible_os_family == 'RedHat'
+
+- name: Configure midonet plugin
+  ini_file:
+    dest: /etc/neutron/plugins/midonet/midonet.ini
+    section: '{{ item.section }}'
+    dest: /etc/neutron/neutron.conf
+    section: '{{ item.section }}'
+  with_items:
+    - section: 'MIDONET'
+      option: 'midonet_uri'
+      value: '{{ midonet_api_uri }}'
+    - section: 'MIDONET'
+      option: 'username'
+      value: '{{ midonet_api_username }}'
+    - section: 'MIDONET'
+      option: 'password'
+      value: '{{ midonet_api_password }}'
+    - section: 'MIDONET'
+      option: 'project_id'
+      value: 'service'
+  notify:
+    - Restart neutron server
+    - Sync midonet database

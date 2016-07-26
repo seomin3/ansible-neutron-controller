@@ -1,0 +1,17 @@
+galaxy_info:
+  author: Abel Boldú
+  description: OpenStack Neutron controller node
+  company: Midokura
+  license: Apache
+  min_ansible_version: 1.9
+  platforms:
+  - name: EL
+    versions:
+    - 7
+  - name: Ubuntu
+    versions:
+    - trusty
+    - xenial
+  galaxy_tags:
+    - cloud
+dependencies: []

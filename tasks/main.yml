@@ -1,0 +1,7 @@
+---
+
+- include: facts.yml
+- include: packages.yml
+- include: configuration_{{ neutron_plugin | default('ml2') }}.yml
+- meta: flush_handlers
+- include: sanitycheck.yml

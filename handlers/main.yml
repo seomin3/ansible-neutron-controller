@@ -1,0 +1,39 @@
+---
+
+- name: Sync neutron database
+  command: >-
+    neutron-db-manage --config-file /etc/neutron/neutron.conf
+    --config-file {{ neutron_plugin_path }} upgrade head
+  become: True
+  become_user: neutron
+
+- name: Sync midonet database
+  command: >-
+    neutron-db-manage --subproject networking-midonet upgrade head
+  become: True
+  become_user: neutron
+
+- name: Restart neutron server
+  service:
+    name: 'neutron-server'
+    state: restarted
+
+- name: Restart linuxbridge agent
+  service:
+    name: 'neutron-linuxbridge-agent'
+    state: restarted
+
+- name: Restart neutron L3 agent
+  service:
+    name: 'neutron-l3-agent'
+    state: restarted
+
+- name: Restart DHCP agent
+  service:
+    name: 'neutron-dhcp-agent'
+    state: restarted
+
+- name: Restart metadata agent
+  service:
+    name: 'neutron-metadata-agent'
+    state: restarted

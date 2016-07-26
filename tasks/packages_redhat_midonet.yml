@@ -1,0 +1,16 @@
+---
+
+- name: Install Neutron midonet packages
+  yum:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - openstack-neutron
+    - python-networking-midonet
+    - python-neutronclient
+
+- name: Purge ML2 packages
+  yum:
+    name: 'openstack-neutron-ml2'
+    state: absent
+    purge: True
