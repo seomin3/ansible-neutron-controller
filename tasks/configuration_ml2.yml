@@ -38,27 +38,38 @@
     - section: 'DEFAULT'
       option: 'auth_strategy'
       value: 'keystone'
-      # FIXME memcached_servers
-    - section: 'keystone_authtoken'
-      option: 'auth_url'
-      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}/'
-    - section: 'keystone_authtoken'
-      option: 'auth_uri'
-      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_port }}/'
-    - section: 'keystone_authtoken'
-      option: 'project_domain_name'
-      value: 'Default'
-    - section: 'keystone_authtoken'
-      option: 'user_domain_name'
-      value: 'Default'
-    - section: 'keystone_authtoken'
-      option: 'project_name'
-      value: 'service'
-    - section: 'keystone_authtoken'
-      option: 'username'
-      value: 'neutron'
-    - section: 'keystone_authtoken'
-      option: 'password'
+    - section: keystone_authtoken
+      option: identity_uri
+      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}'
+    - section: keystone_authtoken
+      option: auth_url
+      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}'
+    - section: keystone_authtoken
+      option: auth_uri
+      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_port }}/v3'
+    - section: keystone_authtoken
+      option: project_domain_name
+      value: default
+    - section: keystone_authtoken
+      option: user_domain_name
+      value: default
+    - section: keystone_authtoken
+      option: memcached_servers
+      value: '{{ keystone_hostname }}:11211'
+    - section: keystone_authtoken
+      option: project_name
+      value: service
+    - section: keystone_authtoken
+      option: auth_type
+      value: password
+    - section: keystone_authtoken
+      option: auth_version
+      value: v3
+    - section: keystone_authtoken
+      option: username
+      value: '{{ neutron_user }}'
+    - section: keystone_authtoken
+      option: password
       value: '{{ neutron_password }}'
   notify:
   - Sync neutron database
