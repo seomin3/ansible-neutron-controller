@@ -71,6 +71,31 @@
     - section: keystone_authtoken
       option: password
       value: '{{ neutron_password }}'
+    # Nova
+    - section: 'nova'
+      option: 'auth_url'
+      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}/'
+    - section: nova
+      option: project_domain_name
+      value: default
+    - section: nova
+      option: user_domain_name
+      value: default
+    - section: nova
+      option: project_name
+      value: service
+    - section: nova
+      option: auth_type
+      value: password
+    - section: nova
+      option: project_name
+      value: service
+    - section: nova
+      option: username
+      value: '{{ nova_username }}'
+    - section: nova
+      option: password
+      value: '{{ nova_password }}'
   notify:
   - Sync neutron database
   - Restart neutron server
