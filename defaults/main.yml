@@ -14,8 +14,8 @@ nova_password: 'nova_pass_default'
 neutron_plugin: 'ml2'
 neutron_plugin_path: '/etc/neutron/plugins/ml2/ml2_conf.ini'
 
+neutron_user: 'neutron'
 neutron_password: 'neutron_pass_default'
-
 neutron_database_url: 'sqlite:////var/lib/neutron/neutron.sqlite'
 
 neutron_nova_metadata_ip: 'localhost'
