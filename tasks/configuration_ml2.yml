@@ -38,6 +38,7 @@
     - section: 'DEFAULT'
       option: 'auth_strategy'
       value: 'keystone'
+<<<<<<< e029934947cf5492beba7a6f36d886c0c0558ad4
     - section: keystone_authtoken
       option: identity_uri
       value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}'
@@ -70,7 +71,57 @@
       value: '{{ neutron_user }}'
     - section: keystone_authtoken
       option: password
+=======
+    - section: 'keystone_authtoken'
+      option: 'auth_url'
+      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}/'
+    - section: 'keystone_authtoken'
+      option: 'auth_uri'
+      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_port }}/'
+    - section: keystone_authtoken
+      option: memcached_servers
+      value: '{{ keystone_hostname }}:11211'
+    - section: 'keystone_authtoken'
+      option: 'project_domain_name'
+      value: 'Default'
+    - section: 'keystone_authtoken'
+      option: 'user_domain_name'
+      value: 'Default'
+    - section: 'keystone_authtoken'
+      option: 'project_name'
+      value: 'service'
+    - section: 'keystone_authtoken'
+      option: 'username'
+      value: 'neutron'
+    - section: 'keystone_authtoken'
+      option: 'password'
+>>>>>>> Nova config, memcached
       value: '{{ neutron_password }}'
+    # Nova
+    - section: 'nova'
+      option: 'auth_url'
+      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}/'
+    - section: nova
+      option: project_domain_name
+      value: default
+    - section: nova
+      option: user_domain_name
+      value: default
+    - section: nova
+      option: project_name
+      value: service
+    - section: nova
+      option: auth_type
+      value: password
+    - section: nova
+      option: project_name
+      value: service
+    - section: nova
+      option: username
+      value: '{{ nova_username }}'
+    - section: nova
+      option: password
+      value: '{{ nova_password }}'
   notify:
   - Sync neutron database
   - Restart neutron server

@@ -9,6 +9,8 @@ keystone_admin_port: 35357
 keystone_hostname: 'localhost'
 keystone_port: 5000
 keystone_protocol: 'http'
+# Nova
+nova_username: 'nova'
 nova_password: 'nova_pass_default'
 
 neutron_plugin: 'ml2'
