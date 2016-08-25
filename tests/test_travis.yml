@@ -47,7 +47,7 @@
       when: ansible_os_family == 'RedHat'
 
     - openstack-keystone
-    - role: openstack-neutron
-      rabbit_hostname: dockerhost
-      rabbit_username: 'test'
-      rabbit_password: 'testpw'
+    - role: openstack-neutron-controller
+      openstack_neutron_controller_rabbit_hostname: dockerhost
+      openstack_neutron_controller_rabbit_username: 'test'
+      openstack_neutron_controller_rabbit_password: 'testpw'

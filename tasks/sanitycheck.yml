@@ -3,11 +3,11 @@
 - name: SANITY CHECK List networks
   shell: >-
     openstack
-    --os-auth-url {{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_port }}/v2.0
-    --os-project-name '{{ demo_project }}'
-    --os-username '{{ demo_user }}'
+    --os-auth-url {{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_port }}/v2.0
+    --os-project-name '{{ openstack_neutron_controller_demo_project }}'
+    --os-username '{{ openstack_neutron_controller_demo_user }}'
     --os-auth-type password
-    --os-password '{{ demo_pass }}'
+    --os-password '{{ openstack_neutron_controller_demo_pass }}'
     network list
   register: network_list_test
   changed_when: network_list_test.rc != 0
