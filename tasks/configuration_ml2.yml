@@ -10,7 +10,7 @@
     # Database
     - section: 'database'
       option: 'connection'
-      value: '{{ neutron_database_url }}'
+      value: '{{ openstack_neutron_controller_neutron_database_url }}'
     # ML2
     - section: 'DEFAULT'
       option: 'core_plugin'
@@ -27,26 +27,26 @@
       value: 'rabbit'
     - section: 'oslo_messaging_rabbit'
       option: 'rabbit_host'
-      value: '{{ rabbit_hostname }}'
+      value: '{{ openstack_neutron_controller_rabbit_hostname }}'
     - section: 'oslo_messaging_rabbit'
       option: 'rabbit_userid'
-      value: '{{ rabbit_username }}'
+      value: '{{ openstack_neutron_controller_rabbit_username }}'
     - section: 'oslo_messaging_rabbit'
       option: 'rabbit_password'
-      value: '{{ rabbit_password }}'
+      value: '{{ openstack_neutron_controller_rabbit_password }}'
     # Keystone
     - section: 'DEFAULT'
       option: 'auth_strategy'
       value: 'keystone'
     - section: keystone_authtoken
       option: identity_uri
-      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}'
+      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}'
     - section: keystone_authtoken
       option: auth_url
-      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}'
+      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}'
     - section: keystone_authtoken
       option: auth_uri
-      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_port }}/v3'
+      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_port }}/v3'
     - section: keystone_authtoken
       option: project_domain_name
       value: default
@@ -55,7 +55,7 @@
       value: default
     - section: keystone_authtoken
       option: memcached_servers
-      value: '{{ keystone_hostname }}:11211'
+      value: '{{ openstack_neutron_controller_keystone_hostname }}:11211'
     - section: keystone_authtoken
       option: project_name
       value: service
@@ -67,14 +67,14 @@
       value: v3
     - section: keystone_authtoken
       option: username
-      value: '{{ neutron_user }}'
+      value: '{{ openstack_neutron_controller_neutron_user }}'
     - section: keystone_authtoken
       option: password
-      value: '{{ neutron_password }}'
+      value: '{{ openstack_neutron_controller_neutron_password }}'
     # Nova
     - section: 'nova'
       option: 'auth_url'
-      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}/'
+      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}/'
     - section: nova
       option: project_domain_name
       value: default
@@ -92,10 +92,10 @@
       value: service
     - section: nova
       option: username
-      value: '{{ nova_username }}'
+      value: '{{ openstack_neutron_controller_nova_username }}'
     - section: nova
       option: password
-      value: '{{ nova_password }}'
+      value: '{{ openstack_neutron_controller_nova_password }}'
   notify:
   - Sync neutron database
   - Restart neutron server
@@ -151,13 +151,13 @@
   with_items:
     - section: 'linux_bridge'
       option: 'physical_interface_mappings'
-      value: 'provider:{{ provider_interface_name }}' # name of the underlying provider physical network interface (to Internet)
+      value: 'provider:{{ openstack_neutron_controller_provider_interface_name }}' # name of the underlying provider physical network interface (to Internet)
     - section: 'vxlan'
       option: 'enable_vxlan'
       value: 'True'
     - section: 'vxlan'
       option: 'local_ip'
-      value: '{{ overlay_interface_address }}' # MGMT interface
+      value: '{{ openstack_neutron_controller_overlay_interface_address }}' # MGMT interface
     - section: 'vxlan'
       option: 'l2_population'
       value: 'True'
@@ -214,9 +214,9 @@
   with_items:
     - section: 'DEFAULT'
       option: 'nova_metadata_ip'
-      value: '{{ neutron_nova_metadata_ip }}'
+      value: '{{ openstack_neutron_controller_neutron_nova_metadata_ip }}'
     - section: 'DEFAULT'
       option: 'metadata_proxy_shared_secret'
-      value: '{{ neutron_metadata_secret }}'
+      value: '{{ openstack_neutron_controller_neutron_metadata_secret }}'
   notify:
   - Restart metadata agent

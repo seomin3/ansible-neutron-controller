@@ -56,4 +56,4 @@
           password: 'rabbit_pass_default'
 
     - openstack-keystone
-    - openstack-neutron
+    - openstack-neutron-controller

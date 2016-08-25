@@ -13,7 +13,7 @@
     # Database
     - section: 'database'
       option: 'connection'
-      value: '{{ neutron_database_url }}'
+      value: '{{ openstack_neutron_controller_neutron_database_url }}'
     # Midonet
     - section: 'DEFAULT'
       option: 'core_plugin'
@@ -33,13 +33,13 @@
       value: rabbit
     - section: oslo_messaging_rabbit
       option: rabbit_host
-      value: '{{ rabbit_hostname }}'
+      value: '{{ openstack_neutron_controller_rabbit_hostname }}'
     - section: oslo_messaging_rabbit
       option: rabbit_userid
-      value: '{{ rabbit_username }}'
+      value: '{{ openstack_neutron_controller_rabbit_username }}'
     - section: oslo_messaging_rabbit
       option: rabbit_password
-      value: '{{ rabbit_password }}'
+      value: '{{ openstack_neutron_controller_rabbit_password }}'
     # Keystone
     - section: DEFAULT
       option: auth_strategy
@@ -47,10 +47,10 @@
       # FIXME memcached_servers
     - section: keystone_authtoken
       option: auth_url
-      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}/'
+      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}/'
     - section: keystone_authtoken
       option: auth_uri
-      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_port }}/'
+      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_port }}/'
     - section: 'keystone_authtoken'
       option: 'auth_plugin'
       value: 'password'
@@ -68,7 +68,7 @@
       value: neutron
     - section: keystone_authtoken
       option: password
-      value: '{{ neutron_password }}'
+      value: '{{ openstack_neutron_controller_neutron_password }}'
     # Nova
     - section: 'DEFAULT'
       option: 'notify_nova_on_port_status_changes'
@@ -93,13 +93,13 @@
       value: 'nova'
     - section: 'nova'
       option: 'password'
-      value: '{{ neutron_nova_password }}'
+      value: '{{ openstack_neutron_controller_neutron_nova_password }}'
     - section: 'DEFAULT'
       option: 'nova_url'
-      value: '{{ neutron_nova_url }}' # http://controller:8774/v2.1
+      value: '{{ openstack_neutron_controller_neutron_nova_url }}' # http://controller:8774/v2.1
     - section: nova
       option: auth_url
-      value: '{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_admin_port }}/'
+      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}/'
   notify:
     - Restart neutron server
     - Sync neutron database
@@ -136,13 +136,13 @@
   with_items:
     - section: 'MIDONET'
       option: 'midonet_uri'
-      value: '{{ midonet_api_uri }}'
+      value: '{{ openstack_neutron_controller_midonet_api_uri }}'
     - section: 'MIDONET'
       option: 'username'
-      value: '{{ midonet_api_username }}'
+      value: '{{ openstack_neutron_controller_midonet_api_username }}'
     - section: 'MIDONET'
       option: 'password'
-      value: '{{ midonet_api_password }}'
+      value: '{{ openstack_neutron_controller_midonet_api_password }}'
     - section: 'MIDONET'
       option: 'project_id'
       value: 'service'

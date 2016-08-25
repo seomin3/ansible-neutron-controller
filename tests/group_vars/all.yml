@@ -44,32 +44,32 @@ mysql_users:
     host: '%'
 
 # Keystone
-keystone_admin_bind_host: 'localhost'
-keystone_bind_host: 'localhost'
-keystone_admin_token: 'os token'
-keystone_database_url: 'mysql+pymysql://keystone:keystonepassword@localhost/keystone'
-keystone_tenants:
+openstack_keystone_admin_bind_host: 'localhost'
+openstack_keystone_bind_host: 'localhost'
+openstack_keystone_admin_token: 'os token'
+openstack_keystone_database_url: 'mysql+pymysql://keystone:keystonepassword@localhost/keystone'
+openstack_keystone_tenants:
   - { name: admin, description: 'Admin tenant' }
   - { name: service, description: 'Service tenant' }
   - { name: demo, description: 'Demo tenant'  }
-keystone_users:
+openstack_keystone_users:
   - { name: admin, password: 'adminpassword', tenant: admin }
   - { name: demo, password: 'demopassword', tenant: demo }
   - { name: glance, password: 'glancepassword', tenant: service }
   - { name: neutron, password: 'neutronpassword', tenant: service }
   - { name: nova, password: 'novapassword', tenant: service }
-keystone_roles:
+openstack_keystone_roles:
   - { name: admin, user: admin, tenant: admin }
   - { name: _member_, user: demo, tenant: demo  }
   - { name: admin, user: glance, tenant: service  }
   - { name: admin, user: neutron, tenant: service  }
   - { name: admin, user: nova, tenant: service  }
-keystone_services:
+openstack_keystone_services:
   - { name: keystone, service_type: identity }
   - { name: glance, service_type: image }
   - { name: neutron, service_type: network }
   - { name: nova, service_type: compute }
-keystone_endpoints:
+openstack_keystone_endpoints:
   - service_name: keystone
     public_url: 'http://localhost:5000/v3'
     internal_url: 'http://localhost:5000/v3'
@@ -88,12 +88,12 @@ keystone_endpoints:
     admin_url: 'http://localhost:9696/'
 
 
-neutron_database_url: 'mysql+pymysql://neutron:neutronpassword@localhost/neutron'
-neutron_password: 'neutronpassword'
-rabbit_hostname: localhost
-rabbit_username: guest
-rabbit_password: guest
-nova_password: 'novapassword'
-demo_user: 'demo'
-demo_pass: 'demopassword'
-demo_project: 'demo'
+openstack_neutron_controller_neutron_database_url: 'mysql+pymysql://neutron:neutronpassword@localhost/neutron'
+openstack_neutron_controller_neutron_password: 'neutronpassword'
+openstack_neutron_controller_rabbit_hostname: localhost
+openstack_neutron_controller_rabbit_username: guest
+openstack_neutron_controller_rabbit_password: guest
+openstack_neutron_controller_nova_password: 'novapassword'
+openstack_neutron_controller_demo_user: 'demo'
+openstack_neutron_controller_demo_pass: 'demopassword'
+openstack_neutron_controller_demo_project: 'demo'

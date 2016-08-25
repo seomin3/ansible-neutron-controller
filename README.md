@@ -5,7 +5,7 @@ openstack-neutron
 * [![Build Status](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron.svg?branch=master)](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron) on master branch
 * [![Build Status](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron.svg?branch=development)](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron) on development branch
 
-OpenStack Neutron role
+OpenStack Neutron Controller role
 
 
 Requirements
@@ -31,7 +31,7 @@ Example Playbook
 
     - hosts: controller001
       roles:
-        - role: openstack-neutron
+        - role: openstack-neutron-controller
           (...)
 
 
