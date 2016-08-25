@@ -1,9 +1,8 @@
-openstack-neutron
+openstack-neutron-controller
 =================
 
 **Status**
-* [![Build Status](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron.svg?branch=master)](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron) on master branch
-* [![Build Status](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron.svg?branch=development)](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron) on development branch
+* [![Build Status](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron-controller.svg?branch=master)](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron-controller) on master branch
 
 OpenStack Neutron Controller role
 
