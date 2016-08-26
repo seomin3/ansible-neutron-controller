@@ -1,5 +1,11 @@
 ---
 
+- name: Wait neutron service
+  wait_for:
+    host: '{{ openstack_neutron_controller_neutron_ip  }}'
+    port: '{{ openstack_neutron_controller_neutron_port }}'
+    delay: 3
+
 - name: SANITY CHECK List networks
   shell: >-
     openstack
