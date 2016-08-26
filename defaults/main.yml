@@ -12,21 +12,20 @@ openstack_neutron_controller_keystone_protocol: 'http'
 # Nova
 openstack_neutron_controller_nova_username: 'nova'
 openstack_neutron_controller_nova_password: 'nova_pass_default'
-
+# Neutron
 openstack_neutron_controller_neutron_plugin: 'ml2'
 openstack_neutron_controller_neutron_plugin_path: '/etc/neutron/plugins/ml2/ml2_conf.ini'
-
 openstack_neutron_controller_neutron_user: 'neutron'
 openstack_neutron_controller_neutron_password: 'neutron_pass_default'
 openstack_neutron_controller_neutron_database_url: 'sqlite:////var/lib/neutron/neutron.sqlite'
-
 openstack_neutron_controller_neutron_nova_metadata_ip: 'localhost'
 openstack_neutron_controller_neutron_metadata_secret: 'somefnordity'
-
+openstack_neutron_controller_neutron_ip: '{{ ansible_default_ipv4.address }}'
+openstack_neutron_controller_neutron_port: 9696
+openstack_neutron_controller_provider_interface_name: '{{ ansible_default_ipv4.interface }}'
+openstack_neutron_controller_overlay_interface_address: '{{ ansible_default_ipv4.address }}'
+# Midonet
 openstack_neutron_controller_midonet_api_hostname: 'localhost'
 openstack_neutron_controller_midonet_api_uri: 'http://{{ openstack_neutron_controller_midonet_api_hostname }}:8181/midonet-api'
 openstack_neutron_controller_midonet_api_username: 'midonet'
 openstack_neutron_controller_midonet_api_password: 'midonet_pass_default'
-
-openstack_neutron_controller_provider_interface_name: '{{ ansible_default_ipv4.interface }}'
-openstack_neutron_controller_overlay_interface_address: '{{ ansible_default_ipv4.address }}'
