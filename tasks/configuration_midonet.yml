@@ -47,10 +47,16 @@
       # FIXME memcached_servers
     - section: keystone_authtoken
       option: auth_url
-      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}/'
+      value: >-
+        {{- openstack_neutron_controller_keystone_protocol }}://
+        {{- openstack_neutron_controller_keystone_hostname }}:
+        {{- openstack_neutron_controller_keystone_admin_port }}/
     - section: keystone_authtoken
       option: auth_uri
-      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_port }}/'
+      value: >-
+        {{- openstack_neutron_controller_keystone_protocol }}://
+        {{- openstack_neutron_controller_keystone_hostname }}:
+        {{- openstack_neutron_controller_keystone_port }}/
     - section: 'keystone_authtoken'
       option: 'auth_plugin'
       value: 'password'
@@ -99,7 +105,10 @@
       value: '{{ openstack_neutron_controller_neutron_nova_url }}'  # http://controller:8774/v2.1
     - section: nova
       option: auth_url
-      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}/'
+      value: >-
+        {{- openstack_neutron_controller_keystone_protocol }}://
+        {{- openstack_neutron_controller_keystone_hostname }}:
+        {{- openstack_neutron_controller_keystone_admin_port }}/
   notify:
     - Restart neutron server
     - Sync neutron database

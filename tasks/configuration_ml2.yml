@@ -40,13 +40,22 @@
       value: 'keystone'
     - section: keystone_authtoken
       option: identity_uri
-      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}'
+      value: >-
+        {{- openstack_neutron_controller_keystone_protocol }}://
+        {{- openstack_neutron_controller_keystone_hostname }}:
+        {{- openstack_neutron_controller_keystone_admin_port }}/
     - section: keystone_authtoken
       option: auth_url
-      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}'
+      value: >-
+        {{- openstack_neutron_controller_keystone_protocol }}://
+        {{- openstack_neutron_controller_keystone_hostname }}:
+        {{- openstack_neutron_controller_keystone_admin_port }}/
     - section: keystone_authtoken
       option: auth_uri
-      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_port }}/v3'
+      value: >-
+        {{- openstack_neutron_controller_keystone_protocol }}://
+        {{- openstack_neutron_controller_keystone_hostname }}:
+        {{- openstack_neutron_controller_keystone_port }}/v3
     - section: keystone_authtoken
       option: project_domain_name
       value: default
@@ -74,7 +83,10 @@
     # Nova
     - section: 'nova'
       option: 'auth_url'
-      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}/'
+      value: >-
+        {{- openstack_neutron_controller_keystone_protocol }}://
+        {{- openstack_neutron_controller_keystone_hostname }}:
+        {{- openstack_neutron_controller_keystone_admin_port }}/
     - section: nova
       option: project_domain_name
       value: default
