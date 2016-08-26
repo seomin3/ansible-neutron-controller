@@ -40,13 +40,22 @@
       value: 'keystone'
     - section: keystone_authtoken
       option: identity_uri
-      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}'
+      value: >-
+        {{- openstack_neutron_controller_keystone_protocol }}://
+        {{- openstack_neutron_controller_keystone_hostname }}:
+        {{- openstack_neutron_controller_keystone_admin_port }}/
     - section: keystone_authtoken
       option: auth_url
-      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}'
+      value: >-
+        {{- openstack_neutron_controller_keystone_protocol }}://
+        {{- openstack_neutron_controller_keystone_hostname }}:
+        {{- openstack_neutron_controller_keystone_admin_port }}/
     - section: keystone_authtoken
       option: auth_uri
-      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_port }}/v3'
+      value: >-
+        {{- openstack_neutron_controller_keystone_protocol }}://
+        {{- openstack_neutron_controller_keystone_hostname }}:
+        {{- openstack_neutron_controller_keystone_port }}/v3
     - section: keystone_authtoken
       option: project_domain_name
       value: default
@@ -74,7 +83,10 @@
     # Nova
     - section: 'nova'
       option: 'auth_url'
-      value: '{{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_admin_port }}/'
+      value: >-
+        {{- openstack_neutron_controller_keystone_protocol }}://
+        {{- openstack_neutron_controller_keystone_hostname }}:
+        {{- openstack_neutron_controller_keystone_admin_port }}/
     - section: nova
       option: project_domain_name
       value: default
@@ -97,8 +109,8 @@
       option: password
       value: '{{ openstack_neutron_controller_nova_password }}'
   notify:
-  - Sync neutron database
-  - Restart neutron server
+    - Sync neutron database
+    - Restart neutron server
 
 # FIXME: Enable services for RH
 
@@ -139,8 +151,8 @@
       option: 'enable_ipset'
       value: 'True'
   notify:
-  - Sync neutron database
-  - Restart neutron server
+    - Sync neutron database
+    - Restart neutron server
 
 - name: Configure the Linux Bridge agent
   ini_file:
@@ -151,13 +163,13 @@
   with_items:
     - section: 'linux_bridge'
       option: 'physical_interface_mappings'
-      value: 'provider:{{ openstack_neutron_controller_provider_interface_name }}' # name of the underlying provider physical network interface (to Internet)
+      value: 'provider:{{ openstack_neutron_controller_provider_interface_name }}'  # name of the underlying provider physical network interface (to Internet)
     - section: 'vxlan'
       option: 'enable_vxlan'
       value: 'True'
     - section: 'vxlan'
       option: 'local_ip'
-      value: '{{ openstack_neutron_controller_overlay_interface_address }}' # MGMT interface
+      value: '{{ openstack_neutron_controller_overlay_interface_address }}'  # MGMT interface
     - section: 'vxlan'
       option: 'l2_population'
       value: 'True'
@@ -168,7 +180,7 @@
       option: 'firewall_driver'
       value: 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'
   notify:
-  - Restart linuxbridge agent
+    - Restart linuxbridge agent
 
 - name: Configure the Layer-3 agent
   ini_file:
@@ -184,7 +196,7 @@
       option: 'external_network_bridge'
       value: ''
   notify:
-  - Restart neutron L3 agent
+    - Restart neutron L3 agent
 
 - name: Configure the DHCP agent
   ini_file:
@@ -203,7 +215,7 @@
       option: 'enable_isolated_metadata'
       value: 'True'
   notify:
-  - Restart DHCP agent
+    - Restart DHCP agent
 
 - name: Configure the metadata agent
   ini_file:
@@ -219,4 +231,4 @@
       option: 'metadata_proxy_shared_secret'
       value: '{{ openstack_neutron_controller_neutron_metadata_secret }}'
   notify:
-  - Restart metadata agent
+    - Restart metadata agent
