@@ -9,6 +9,8 @@
     section: '{{ item.section }}'
     option: '{{ item.option }}'
     value: '{{ item.value }}'
+  notify:
+    - Restart neutron server
   with_items:
     # Database
     - section: 'database'
@@ -109,9 +111,6 @@
         {{- openstack_neutron_controller_keystone_protocol }}://
         {{- openstack_neutron_controller_keystone_hostname }}:
         {{- openstack_neutron_controller_keystone_admin_port }}/
-  notify:
-    - Restart neutron server
-    - Sync neutron database
 
 - name: Create plugin directory
   file:
@@ -140,6 +139,8 @@
   ini_file:
     dest: /etc/neutron/plugins/midonet/midonet.ini
     section: '{{ item.section }}'
+  notify:
+    - Restart neutron server
   with_items:
     - section: 'MIDONET'
       option: 'midonet_uri'
@@ -153,6 +154,43 @@
     - section: 'MIDONET'
       option: 'project_id'
       value: 'service'
+
+- name: Get current neutron database version
+  command: >-
+    neutron-db-manage
+    --config-file /etc/neutron/neutron.conf
+    --config-file {{ openstack_neutron_controller_neutron_plugin_path }}
+    current
+  always_run: True
+  become: True
+  become_user: 'neutron'
+  changed_when: neutron_db_manage_current.stdout.find('(head)') == -1
+  register: neutron_db_manage_current
+
+- name: Migrate neutron database to head version
+  command: >-
+    neutron-db-manage
+    --config-file /etc/neutron/neutron.conf
+    --config-file {{ openstack_neutron_controller_neutron_plugin_path }}
+    upgrade heads
+  become: True
+  become_user: 'neutron'
   notify:
     - Restart neutron server
-    - Sync midonet database
+  when: neutron_db_manage_current|changed
+
+- name: Get current networking-midonet database version
+  command: 'neutron-db-manage --subproject networking-midonet current'
+  always_run: True
+  become: True
+  become_user: 'neutron'
+  changed_when: neutron_db_manage_networking_midonet_current.stdout.find('(head)') == -1
+  register: neutron_db_manage_networking_midonet_current
+
+- name: Migrate networking-midonet database to head version
+  command: 'neutron-db-manage --subproject networking-midonet upgrade heads'
+  become: True
+  become_user: 'neutron'
+  notify:
+    - Restart neutron server
+  when: neutron_db_manage_networking_midonet_current|changed

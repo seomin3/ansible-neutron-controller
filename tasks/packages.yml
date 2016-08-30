@@ -1,7 +1,0 @@
----
-
-- include: packages_redhat_{{ openstack_neutron_controller_neutron_plugin | default('ml2') }}.yml
-  when: ansible_os_family == 'RedHat'
-
-- include: packages_debian_{{ openstack_neutron_controller_neutron_plugin | default('ml2') }}.yml
-  when: ansible_os_family == 'Debian'

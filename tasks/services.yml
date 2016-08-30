@@ -1,0 +1,19 @@
+---
+
+- name: 'Start neutron server'
+  service:
+    enabled: True
+    name: 'neutron-server'
+    state: started
+
+- name: 'Start and enable ML2 related daemons'
+  service:
+    enabled: True
+    name: '{{ item }}'
+    state: started
+  when: openstack_neutron_controller_neutron_plugin == 'ml2'
+  with_items:
+    - 'neutron-dhcp-agent'
+    - 'neutron-l3-agent'
+    - 'neutron-linuxbridge-agent'
+    - 'neutron-metadata-agent'

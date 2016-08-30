@@ -1,18 +1,5 @@
 ---
 
-- name: Sync neutron database
-  command: >-
-    neutron-db-manage --config-file /etc/neutron/neutron.conf
-    --config-file {{ openstack_neutron_controller_neutron_plugin_path }} upgrade head
-  become: True
-  become_user: neutron
-
-- name: Sync midonet database
-  command: >-
-    neutron-db-manage --subproject networking-midonet upgrade head
-  become: True
-  become_user: neutron
-
 - name: Restart neutron server
   service:
     name: 'neutron-server'
