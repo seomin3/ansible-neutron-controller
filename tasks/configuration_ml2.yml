@@ -6,6 +6,8 @@
     section: '{{ item.section }}'
     option: '{{ item.option }}'
     value: '{{ item.value }}'
+  notify:
+    - Restart neutron server
   with_items:
     # Database
     - section: 'database'
@@ -108,11 +110,6 @@
     - section: nova
       option: password
       value: '{{ openstack_neutron_controller_nova_password }}'
-  notify:
-    - Sync neutron database
-    - Restart neutron server
-
-# FIXME: Enable services for RH
 
 - name: Link default neutron plugin
   file:
@@ -128,6 +125,8 @@
     section: '{{ item.section }}'
     option: '{{ item.option }}'
     value: '{{ item.value }}'
+  notify:
+    - Restart neutron server
   with_items:
     - section: 'ml2'
       option: 'type_drivers'
@@ -150,9 +149,6 @@
     - section: 'securitygroup'
       option: 'enable_ipset'
       value: 'True'
-  notify:
-    - Sync neutron database
-    - Restart neutron server
 
 - name: Configure the Linux Bridge agent
   ini_file:
@@ -160,6 +156,8 @@
     section: '{{ item.section }}'
     option: '{{ item.option }}'
     value: '{{ item.value }}'
+  notify:
+    - Restart linuxbridge agent
   with_items:
     - section: 'linux_bridge'
       option: 'physical_interface_mappings'
@@ -179,8 +177,6 @@
     - section: 'securitygroup'
       option: 'firewall_driver'
       value: 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'
-  notify:
-    - Restart linuxbridge agent
 
 - name: Configure the Layer-3 agent
   ini_file:
@@ -188,6 +184,8 @@
     section: '{{ item.section }}'
     option: '{{ item.option }}'
     value: '{{ item.value }}'
+  notify:
+    - Restart neutron L3 agent
   with_items:
     - section: 'DEFAULT'
       option: 'interface_driver'
@@ -195,8 +193,6 @@
     - section: 'DEFAULT'
       option: 'external_network_bridge'
       value: ''
-  notify:
-    - Restart neutron L3 agent
 
 - name: Configure the DHCP agent
   ini_file:
@@ -204,6 +200,8 @@
     section: '{{ item.section }}'
     option: '{{ item.option }}'
     value: '{{ item.value }}'
+  notify:
+    - Restart DHCP agent
   with_items:
     - section: 'DEFAULT'
       option: 'interface_driver'
@@ -214,8 +212,6 @@
     - section: 'DEFAULT'
       option: 'enable_isolated_metadata'
       value: 'True'
-  notify:
-    - Restart DHCP agent
 
 - name: Configure the metadata agent
   ini_file:
@@ -223,6 +219,8 @@
     section: '{{ item.section }}'
     option: '{{ item.option }}'
     value: '{{ item.value }}'
+  notify:
+    - Restart metadata agent
   with_items:
     - section: 'DEFAULT'
       option: 'nova_metadata_ip'
@@ -230,5 +228,31 @@
     - section: 'DEFAULT'
       option: 'metadata_proxy_shared_secret'
       value: '{{ openstack_neutron_controller_neutron_metadata_secret }}'
+
+- name: Get current neutron database version
+  command: >-
+    neutron-db-manage
+    --config-file /etc/neutron/neutron.conf
+    --config-file {{ openstack_neutron_controller_neutron_plugin_path }}
+    current
+  always_run: True
+  become: True
+  become_user: 'neutron'
+  changed_when: neutron_db_manage_current.stdout.find('(head)') == -1
+  register: neutron_db_manage_current
+
+- name: Migrate neutron database to head version
+  command: >-
+    neutron-db-manage
+    --config-file /etc/neutron/neutron.conf
+    --config-file {{ openstack_neutron_controller_neutron_plugin_path }}
+    upgrade heads
+  become: True
+  become_user: 'neutron'
   notify:
+    - Restart neutron server
+    - Restart linuxbridge agent
+    - Restart neutron L3 agent
+    - Restart DHCP agent
     - Restart metadata agent
+  when: neutron_db_manage_current|changed
