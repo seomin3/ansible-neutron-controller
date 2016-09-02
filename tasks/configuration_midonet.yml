@@ -1,8 +1,5 @@
 ---
 
-# install ml2 package for rh
-
-
 - name: Configure neutron controller
   ini_file:
     dest: /etc/neutron/neutron.conf
@@ -19,16 +16,16 @@
     # Midonet
     - section: 'DEFAULT'
       option: 'core_plugin'
-      value: 'midonet.neutron.plugin_v2.MidonetPluginV2'
+      value: 'ml2'
     - section: 'DEFAULT'
       option: 'service_plugins'
-      value: 'midonet.neutron.services.l3.l3_midonet.MidonetL3ServicePlugin'
+      value: >-
+        midonet_firewall,
+        midonet.neutron.services.l3.l3_midonet.MidonetL3ServicePlugin,
+        neutron_vpnaas.services.vpn.plugin.VPNDriverPlugin
     - section: DEFAULT
       option: allow_overlapping_ips
       value: 'True'
-    - section: 'DEFAULT'
-      option: 'dhcp_agent_notification'
-      value: 'False'
     # Messaging
     - section: DEFAULT
       option: rpc_backend
@@ -46,7 +43,6 @@
     - section: DEFAULT
       option: auth_strategy
       value: keystone
-      # FIXME memcached_servers
     - section: keystone_authtoken
       option: auth_url
       value: >-
@@ -62,6 +58,9 @@
     - section: 'keystone_authtoken'
       option: 'auth_plugin'
       value: 'password'
+    - section: keystone_authtoken
+      option: memcached_servers
+      value: '{{ openstack_neutron_controller_keystone_hostname }}:11211'
     - section: keystone_authtoken
       option: project_domain_name
       value: default
@@ -104,7 +103,7 @@
       value: '{{ openstack_neutron_controller_neutron_nova_password }}'
     - section: 'DEFAULT'
       option: 'nova_url'
-      value: '{{ openstack_neutron_controller_neutron_nova_url }}'  # http://controller:8774/v2.1
+      value: '{{ openstack_neutron_controller_neutron_nova_url }}'
     - section: nova
       option: auth_url
       value: >-
@@ -112,36 +111,39 @@
         {{- openstack_neutron_controller_keystone_hostname }}:
         {{- openstack_neutron_controller_keystone_admin_port }}/
 
-- name: Create plugin directory
-  file:
-    path: '/etc/neutron/plugins/midonet'
-    state: directory
-    owner: 'neutron'
-    mode: 0755
-
-- name: Set default neutron plugin
-  lineinfile:
-    dest: '/etc/default/neutron-server'
-    regexp: '^NEUTRON_PLUGIN_CONFIG=.*$'
-    line: 'NEUTRON_PLUGIN_CONFIG="/etc/neutron/plugins/midonet/midonet.ini"'
-    backrefs: True
-  when: ansible_os_family == 'Debian'
-
 - name: Link default neutron plugin
   file:
-    src: '/etc/neutron/plugins/midonet/midonet.ini'
+    src: '/etc/neutron/plugins/ml2/ml2_conf.ini'
     dest: '/etc/neutron/plugin.ini'
     owner: neutron
     state: link
   when: ansible_os_family == 'RedHat'
 
-- name: Configure midonet plugin
+- name: Configure Modular Layer 2 plugin
   ini_file:
     dest: /etc/neutron/plugins/midonet/midonet.ini
     section: '{{ item.section }}'
   notify:
     - Restart neutron server
   with_items:
+    - section: 'ml2'
+      option: 'type_drivers'
+      value: 'midonet,uplink'
+    - section: 'ml2'
+      option: 'tenant_network_types'
+      value: 'midonet'
+    - section: 'ml2'
+      option: 'mechanism_drivers'
+      value: 'midonet'
+    - section: 'ml2'
+      option: 'extension_drivers'
+      value: 'port_security'
+    - section: 'ml2_type_flat'
+      option: 'flat_networks'
+      value: 'public'
+    - section: 'MIDONET'
+      option: 'client'
+      value: 'midonet.neutron.client.api.MidonetApiClient'
     - section: 'MIDONET'
       option: 'midonet_uri'
       value: '{{ openstack_neutron_controller_midonet_api_uri }}'
