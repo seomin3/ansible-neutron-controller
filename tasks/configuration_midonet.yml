@@ -84,32 +84,32 @@
       option: 'notify_nova_on_port_data_changes'
       value: 'True'
     - section: 'nova'
-      option: 'auth_plugin'
-      value: 'password'
-    - section: 'nova'
-      option: 'project_domain_name'
-      value: 'default'
-    - section: 'nova'
-      option: 'user_domain_name'
-      value: 'default'
-    - section: 'nova'
-      option: 'project_name'
-      value: 'service'
-    - section: 'nova'
-      option: 'username'
-      value: 'nova'
-    - section: 'nova'
-      option: 'password'
-      value: '{{ openstack_neutron_controller_neutron_nova_password }}'
-    - section: 'DEFAULT'
-      option: 'nova_url'
-      value: '{{ openstack_neutron_controller_neutron_nova_url }}'
-    - section: nova
-      option: auth_url
+      option: 'auth_url'
       value: >-
         {{- openstack_neutron_controller_keystone_protocol }}://
         {{- openstack_neutron_controller_keystone_hostname }}:
         {{- openstack_neutron_controller_keystone_admin_port }}/
+    - section: nova
+      option: project_domain_name
+      value: default
+    - section: nova
+      option: user_domain_name
+      value: default
+    - section: nova
+      option: project_name
+      value: service
+    - section: nova
+      option: auth_type
+      value: password
+    - section: nova
+      option: project_name
+      value: service
+    - section: nova
+      option: username
+      value: '{{ openstack_neutron_controller_nova_username }}'
+    - section: nova
+      option: password
+      value: '{{ openstack_neutron_controller_nova_password }}'
 
 - name: Link default neutron plugin
   file:
