@@ -21,8 +21,7 @@
       option: 'service_plugins'
       value: >-
         midonet_firewall,
-        midonet.neutron.services.l3.l3_midonet.MidonetL3ServicePlugin,
-        neutron_vpnaas.services.vpn.plugin.VPNDriverPlugin
+        midonet.neutron.services.l3.l3_midonet.MidonetL3ServicePlugin
     - section: DEFAULT
       option: allow_overlapping_ips
       value: 'True'
