@@ -15,27 +15,6 @@
           password: 'guest'
 
     - role: mysql
-      mysql_root_password: 'mysqlpassword'
-      mysql_bind_address: 0.0.0.0
-      mysql_innodb_file_per_table: 'innodb_file_per_table'
-      mysql_daemon: 'mysql'
-      mysql_log_error: '/var/log/mysql/error.log'
-      mysql_pid_file: '/var/run/mysqld/mysqld.pid'
-      mysql_packages:
-        - mariadb-client
-        - mariadb-server
-        - python-mysqldb
-      when: ansible_os_family == 'Debian'
-
     - role: mysql
-      mysql_root_password: 'mysqlpassword'
-      mysql_bind_address: 0.0.0.0
-      mysql_innodb_file_per_table: 'innodb_file_per_table'
-      mysql_daemon: 'mariadb'
-      mysql_log_error: '/var/log/mariadb/mariadb.log'
-      mysql_syslog_tag: 'mariadb'
-      mysql_pid_file: '/var/run/mariadb/mariadb.pid'
-      when: ansible_os_family == 'RedHat'
-
     - role: openstack-keystone
     - role: openstack-neutron-controller

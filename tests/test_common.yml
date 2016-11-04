@@ -4,9 +4,28 @@
   become: True
 
   pre_tasks:
+    - set_fact:
+        mysql_daemon: 'mysql'
+        mysql_log_error: '/var/log/mysql/error.log'
+        mysql_pid_file: '/var/run/mysqld/mysqld.pid'
+        mysql_packages:
+          - 'mariadb-client'
+          - 'mariadb-server'
+          - 'python-mysqldb'
+      when: ansible_os_family == 'Debian'
+
+    - set_fact:
+        mysql_daemon: 'mariadb'
+        mysql_socket: '/var/lib/mysql/mysql.sock'
+        mysql_log_error: '/var/log/mariadb/mariadb.log'
+        mysql_syslog_tag: 'mariadb'
+        mysql_pid_file: '/var/run/mariadb/mariadb.pid'
+      when: ansible_os_family == 'RedHat'
+
     - name: Update local apt cache (Ubuntu)
       apt:
         update_cache: True
+      changed_when: False
       when: ansible_os_family == 'Debian'
 
     - name: Install policycoreutils-python
