@@ -21,7 +21,8 @@
       option: 'service_plugins'
       value: >-
         midonet_firewall,
-        midonet.neutron.services.l3.l3_midonet.MidonetL3ServicePlugin
+        midonet.neutron.services.l3.l3_midonet.MidonetL3ServicePlugin,
+        midonet_bgp
     - section: DEFAULT
       option: allow_overlapping_ips
       value: 'True'
