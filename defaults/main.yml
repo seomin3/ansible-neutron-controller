@@ -29,3 +29,9 @@ openstack_neutron_controller_midonet_api_hostname: 'localhost'
 openstack_neutron_controller_midonet_api_uri: 'http://{{ openstack_neutron_controller_midonet_api_hostname }}:8181/midonet-api'
 openstack_neutron_controller_midonet_api_username: 'midonet'
 openstack_neutron_controller_midonet_api_password: 'midonet_pass_default'
+# Sanity Check
+openstack_neutron_controller_sanitycheck_address: 'localhost'
+openstack_neutron_controller_sanitycheck_port: 8774
+openstack_neutron_controller_demo_project: demo
+openstack_neutron_controller_demo_user: demo
+openstack_neutron_controller_demo_pass: demo

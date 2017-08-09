@@ -2,10 +2,10 @@
 
 - include: facts.yml
 
-- include: selinux.yml
-  when:
-    - ansible_os_family == 'RedHat'
-    - ansible_selinux
+#- include: selinux.yml
+#  when:
+#    - ansible_os_family == 'RedHat'
+#    - ansible_selinux
 
 - include: packages_redhat_{{ openstack_neutron_controller_neutron_plugin }}.yml
   when: ansible_os_family == 'RedHat'

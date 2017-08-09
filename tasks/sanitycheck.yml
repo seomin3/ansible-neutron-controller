@@ -10,7 +10,7 @@
   shell: >-
     openstack
     --os-identity-api-version 3
-    --os-auth-url {{ openstack_keystone_protocol }}://{{ openstack_keystone_hostname }}:{{ openstack_keystone_port }}/v3
+    --os-auth-url {{ openstack_neutron_controller_keystone_protocol }}://{{ openstack_neutron_controller_keystone_hostname }}:{{ openstack_neutron_controller_keystone_port }}/v3
     --os-project-name '{{ openstack_neutron_controller_demo_project }}'
     --os-username '{{ openstack_neutron_controller_demo_user }}'
     --os-auth-type password
