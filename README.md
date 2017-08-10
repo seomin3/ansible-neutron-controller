@@ -4,7 +4,7 @@ openstack-neutron-controller
 **Status**
 * [![Build Status](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron-controller.svg?branch=master)](https://travis-ci.org/openstack-ansible-galaxy/openstack-neutron-controller) on master branch
 
-OpenStack Neutron Controller role
+OpenStack Neutron Controller role with bridge network
 
 
 Requirements
