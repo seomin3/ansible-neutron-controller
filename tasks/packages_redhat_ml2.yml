@@ -7,5 +7,5 @@
   with_items:
     - openstack-neutron
     - openstack-neutron-ml2
-    - openstack-neutron-linuxbridge
-    - ebtables
+    - openvswitch
+    - openstack-neutron-openvswitch

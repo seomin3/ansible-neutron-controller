@@ -1,0 +1,13 @@
+---
+
+- name: add the ovs bridge to network configuration
+  command: |
+    /usr/bin/ovs-vsctl --timeout=5 -- --may-exist add-br "{{ item.bridge }}" -- set bridge "{{ item.bridge }}" datapath_type=system
+  with_items:
+    - "{{ ovs_provider }}"
+
+- name: add the ovs port to network configuration
+  command: |
+    /usr/bin/ovs-vsctl --timeout=5 -- --may-exist add-port "{{ item.bridge }}" "{{ item.ether }}"
+  with_items:
+    - "{{ ovs_provider }}"

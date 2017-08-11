@@ -15,5 +15,6 @@
   with_items:
     - 'neutron-dhcp-agent'
     - 'neutron-l3-agent'
-    - 'neutron-linuxbridge-agent'
+    - 'neutron-openvswitch-agent'
     - 'neutron-metadata-agent'
+    - 'openvswitch'

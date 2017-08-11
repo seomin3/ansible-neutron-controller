@@ -5,9 +5,9 @@
     name: 'neutron-server'
     state: restarted
 
-- name: Restart linuxbridge agent
+- name: Restart openvswitch agent
   service:
-    name: 'neutron-linuxbridge-agent'
+    name: 'neutron-openvswitch-agent'
     state: restarted
 
 - name: Restart neutron L3 agent

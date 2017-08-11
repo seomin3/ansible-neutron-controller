@@ -35,3 +35,6 @@ openstack_neutron_controller_sanitycheck_port: 8774
 openstack_neutron_controller_demo_project: demo
 openstack_neutron_controller_demo_user: demo
 openstack_neutron_controller_demo_pass: demo
+# openvsitch
+ovs_provider: None
+ovs_tenant: None
